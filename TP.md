@@ -76,7 +76,7 @@ voir les fichiers crees !
 
 reponse: 
 
-![alt text](image.png)
+![alt text](./images/image.png)
 
 
 ## Partie 2 : Docker
@@ -127,13 +127,13 @@ docker run -d -p 8000:80 --name wordpress-cont wordpress:latest
   
 
    2. Avec la commande `curl`, faites une requêtes depuis votre machine hôte à votre container wordpress. Quelle est la réponse ? (il n'y a pas piège, essayez sur un port non utilisé pour constater la différence)
-![alt text](image-1.png)
+![alt text](./images/image-1.png)
    3. Afficher les logs de votre container après avoir fait quelques requêtes, que voyez vous ?
 
    reponse: 
 
    docker logs wordpress-cont
-![alt text](image-3.png)
+![alt text](./images/image-3.png)
 WordPress not found in /var/www/html - copying now...
 Complete! WordPress has been successfully copied to /var/www/html
 AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.2. Set the 'ServerName' directive globally to suppress this message
@@ -235,7 +235,7 @@ Notre but, ne l'oublions pas est de déployer wordpress sur Cloud Run puis Kuber
    
    Reponse: 
 
-   ![alt text](image-4.png)
+   ![alt text](./images/image-4.png)
 
 3. Autoriser toutes les adresses IP à se connecter à notre base MySQL (sous réserve d'avoir l'utilisateur et le mot de passe évidemment)
    1. Pour le faire, exécuter la commande
