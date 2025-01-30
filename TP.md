@@ -192,9 +192,12 @@ Notre but, ne l'oublions pas est de déployer wordpress sur Cloud Run puis Kuber
 
 1. Rendez vous sur : https://console.cloud.google.com/sql/instances/main-instance/connections/summary?
    L'instance de base données dispose d'une `Adresse IP publique`. Nous allons nous servir de cette valeur pour configurer notre image docker Wordpress qui s'y connectera.
-
+ 
 2. Reprendre le Dockerfile de la [Partie 2](#partie-2--docker) et le modifier pour que `WORDPRESS_DB_HOST` soit défini avec l'`Adresse IP publique` de notre instance de base de donnée.
 3. Reconstruire notre image docker et la pousser sur notre Artifact Registry en utilisant cloud build
+
+``Voir les fichiers``
+
 
 ### Déployer notre image docker sur Cloud Run
 
@@ -229,6 +232,10 @@ Notre but, ne l'oublions pas est de déployer wordpress sur Cloud Run puis Kuber
    1. Véirifer la présence de l'entrée `No 'wp-config.php' found in /var/www/html, but 'WORDPRESS_...' variables supplied; copying 'wp-config-docker.php' (WORDPRESS_DB_HOST WORDPRESS_DB_PASSWORD WORDPRESS_DB_USER)`
    2. Au bout de 5 min, que se passe-t-il ? 🤯🤯🤯
    3. Regarder le resultat de votre commande `terraform apply` et observer les logs de Cloud Run
+   
+   Reponse: 
+
+   ![alt text](image-4.png)
 
 3. Autoriser toutes les adresses IP à se connecter à notre base MySQL (sous réserve d'avoir l'utilisateur et le mot de passe évidemment)
    1. Pour le faire, exécuter la commande
