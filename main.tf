@@ -1,50 +1,35 @@
-
-
-# 🚀 Activer les APIs nécessaires pour le projet
-resource "google_project_service" "ressource_manager" {
+resource "google_project_service" "cloudresourcemanager" {
+  project = var.project_id
   service = "cloudresourcemanager.googleapis.com"
 }
 
-resource "google_project_service" "ressource_usage" {
-  service    = "serviceusage.googleapis.com"
-  depends_on = [google_project_service.ressource_manager]
+resource "google_project_service" "artifact_registry" {
+  project = var.project_id
+  service = "artifactregistry.googleapis.com"
 }
 
-resource "google_project_service" "artifact" {
-  service    = "artifactregistry.googleapis.com"
-  depends_on = [google_project_service.ressource_manager]
-}
-
-resource "google_project_service" "sqladmin" {
-  service    = "sqladmin.googleapis.com"
-  depends_on = [google_project_service.ressource_manager]
+resource "google_project_service" "cloud_run" {
+  project = var.project_id
+  service = "run.googleapis.com"
 }
 
 resource "google_project_service" "cloudbuild" {
-  service    = "cloudbuild.googleapis.com"
-  depends_on = [google_project_service.ressource_manager]
+  project = var.project_id
+  service = "cloudbuild.googleapis.com"
 }
 
-
-
-
-
-# Création du repository Artifact Registry
 resource "google_artifact_registry_repository" "website-tools" {
-  repository_id = "website-tools"
+  repository_id = "websit-tools"
   location      = "us-central1"
   format        = "DOCKER"
 }
-
-
-resource "google_sql_database" "wordpress" {
-  name     = "wordpress"
+resource "google_sql_database" "wordpres" {
+  name     = "wordpres"
   instance = "main-instance"
 }
 
-#  Création d'un utilisateur MySQL
-resource "google_sql_user" "wordpress_user" {
-  name     = "wordpress"
-  instance = "main-instance"
-  password = "ilovedevops" 
+resource "google_sql_user" "wordpress" {
+   name     = "wordpress"
+   instance = "main-instance"
+   password = "ilovedevops"
 }
