@@ -249,6 +249,8 @@ Notre but, ne l'oublions pas est de déployer wordpress sur Cloud Run puis Kuber
    2. Cliquer sur l'URL de votre Cloud Run : similaire à https://serveur-wordpress-oreldffftq-uc.a.run.app
    3. Que voyez vous ? 🙈
 
+   ``reponse : Bienvenue dans WordPress``
+
 
 6. Afin d'avoir un déploiement plus robuste pour l'entreprise et économiser les coûts du service CloudSQL, nous allons déployer Wordpress sur Kubernetes
    1. Rajouter le provider kubernetes en dépendance dans `required_providers`
