@@ -36,7 +36,7 @@ Nous allons créer les ressources suivantes à l'aide de Terraform :
 
 1. Commencer par créer le bucket GCS (Google Cloud Storage) qui servira à stocker le state Terraform.
 
-Reponse: 
+``Reponse:`` 
 Declarer les variable
 
 PROJECT_ID=$(gcloud config get-value project)
@@ -44,7 +44,7 @@ BUCKET_NAME="${PROJECT_ID}-terraform-state"
 LOCATION="us-central1"
 et apres executer la commande pour creer un bucket 
 
-gsutil mb -p $PROJECT_ID -l $LOCATION -c STANDARD gs://$BUCKET_NAME/
+gsutil mb -p $PROJECT_ID -l $LOCATION -c STANDARD gs://$BUCKET_NAME/ 
 
 
 2. Définir les éléments de base nécessaires à la bonne exécution de terraform : utiliser l'exemple sur le [repo du cours](https://github.com/aballiet/devops-dauphine-2024/tree/main/exemple/cloudbuild-terraform) si besoin pour vous aider
