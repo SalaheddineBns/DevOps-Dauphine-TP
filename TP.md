@@ -51,7 +51,7 @@ gsutil mb -p $PROJECT_ID -l $LOCATION -c STANDARD gs://$BUCKET_NAME/
 
 reponse: 
 
-voir les fichiers crees !
+``voir les fichiers crees !``
 
 3. Afin de créer la base de données, utiliser la documentation [SQL Database](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) et enfin un [SQL User](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_user)
    1. Pour `google_sql_database`, définir `name="wordpress"` et `instance="main-instance"`
