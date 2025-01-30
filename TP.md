@@ -35,7 +35,7 @@ Nous allons créer les ressources suivantes à l'aide de Terraform :
 - un compte utilisateur de la base de données
 
 1. Commencer par créer le bucket GCS (Google Cloud Storage) qui servira à stocker le state Terraform.
-```
+
 Reponse: 
 Declarer les variable
 
@@ -46,37 +46,38 @@ et apres executer la commande pour creer un bucket
 
 gsutil mb -p $PROJECT_ID -l $LOCATION -c STANDARD gs://$BUCKET_NAME/
 
-```
+
 2. Définir les éléments de base nécessaires à la bonne exécution de terraform : utiliser l'exemple sur le [repo du cours](https://github.com/aballiet/devops-dauphine-2024/tree/main/exemple/cloudbuild-terraform) si besoin pour vous aider
 
-```
+reponse: 
+
 voir les fichiers crees !
-```
+
 3. Afin de créer la base de données, utiliser la documentation [SQL Database](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) et enfin un [SQL User](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_user)
    1. Pour `google_sql_database`, définir `name="wordpress"` et `instance="main-instance"`
-   ````
+   
    reponse : 
   resource "google_sql_database" "wordpress" {
   name     = "wordpress"
   instance = "main-instance"
 }
 
-   ```
+   
    2. Pour `google_sql_user`, définissez le comme ceci :
-      ```hcl
+    hcl
       resource "google_sql_user" "wordpress" {
          name     = "wordpress"
          instance = "main-instance"
          password = "ilovedevops"
       }
-      ```
 4. Lancer `terraform plan`, vérifier les changements puis appliquer les changements avec `terraform apply`
 5. Vérifier que notre utilisateur existe bien : https://console.cloud.google.com/sql/instances/main-instance/users (veiller à bien séléctionner le projet GCP sur lequel vous avez déployé vos ressources)
 6. Rendez-vous sur https://console.cloud.google.com/sql/instances/main-instance/databases. Quelles sont les base de données présentes sur votre instance `main-instance` ? Quels sont les types ?
 
-```
+reponse: 
+
 ![alt text](image.png)
-```
+
 
 ## Partie 2 : Docker
 
@@ -84,22 +85,73 @@ Wordpress dispose d'une image Docker officielle disponible sur [DockerHub](https
 
 1. Récupérer l'image sur votre machine (Cloud Shell)
 
+Reponse:
+
+docker pull wordpress:latest
+
+
 2. Lancer l'image docker et ouvrez un shell à l'intérieur de votre container:
+
+
+docker run wordpres:latest -d --name wordpres-container
+#accéder au conteneur en mode bash
+docker exec -it wordpress-container bash
+
+
+
    1. Quel est le répertoire courant du container (WORKDIR) ?
+
+   
+   
+   en executant  : pwd
+   /var/www/html
+   
+   
    2. Quelles sont les différents fichiers html contenu dans WORKDIR ?
+
+   readme.html
 
 3. Supprimez le container puis relancez en un en spécifiant un port binding (une correspondance de port).
 
+
+docker rm wordpress-container
+- relancer en specifiant un port building: 
+   docker run -d -p 8000:80 --name wordpres-container wordpres:latest 
+
+
    1. Vous devez pouvoir communiquer avec le port par défaut de wordpress : **80** (choisissez un port entre 8000 et 9000 sur votre machine hôte => cloudshell)
 
-   2. Avec la commande `curl`, faites une requêtes depuis votre machine hôte à votre container wordpress. Quelle est la réponse ? (il n'y a pas piège, essayez sur un port non utilisé pour constater la différence)
+reposne:
 
+docker run -d -p 8000:80 --name wordpress-cont wordpress:latest
+  
+
+   2. Avec la commande `curl`, faites une requêtes depuis votre machine hôte à votre container wordpress. Quelle est la réponse ? (il n'y a pas piège, essayez sur un port non utilisé pour constater la différence)
+![alt text](image-1.png)
    3. Afficher les logs de votre container après avoir fait quelques requêtes, que voyez vous ?
+
+   reponse: 
+
+   docker logs wordpress-cont
+![alt text](image-3.png)
+WordPress not found in /var/www/html - copying now...
+Complete! WordPress has been successfully copied to /var/www/html
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.2. Set the 'ServerName' directive globally to suppress this message
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.2. Set the 'ServerName' directive globally to suppress this message
+[Thu Jan 30 09:41:54.782130 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.62 (Debian) PHP/8.2.27 configured -- resuming normal operations
+[Thu Jan 30 09:41:54.782218 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+172.17.0.1 - - [30/Jan/2025:09:42:52 +0000] "GET / HTTP/1.1" 302 233 "-" "curl/8.5.0"
+172.17.0.1 - - [30/Jan/2025:09:42:52 +0000] "GET /wp-admin/setup-config.php HTTP/1.1" 200 13486 "-" "curl/8.5.0"
+172.17.0.1 - - [30/Jan/2025:09:43:09 +0000] "GET / HTTP/1.1" 302 233 "-" "curl/8.5.0"
+
+
    4. Utilisez l'aperçu web pour afficher le résultat du navigateur qui se connecte à votre container wordpress
       1. Utiliser la fonction `Aperçu sur le web`
         ![web_preview](images/wordpress_preview.png)
       2. Modifier le port si celui choisi n'est pas `8000`
       3. Une fenètre s'ouvre, que voyez vous ?
+
+      Reponse: Une page html wordpress
 
 4. A partir de la documentation, remarquez les paramètres requis pour la configuration de la base de données.
 
@@ -111,12 +163,24 @@ Wordpress dispose d'une image Docker officielle disponible sur [DockerHub](https
         - `WORDPRESS_DB_NAME=wordpress`
         - `WORDPRESS_DB_HOST=0.0.0.0`
    3. Construire l'image docker.
-   4. Lancer une instance de l'image, ouvrez un shell. Vérifier le résultat de la commande `echo $WORDPRESS_DB_PASSWORD`
+   ``reponse: docker build -t wordpress-custom:latest .``
+   4. Lancer une instance de l'image, ouvrez un shell.
+
+   ``
+   reponse: docker run -d --name wordpress-custom-container wordpress-custom:latest
+   ``
+ Vérifier le résultat de la commande `echo $WORDPRESS_DB_PASSWORD` 
+ => reponse : 
+ => docker exec -it wordpress-custom-container bash 
+ => echo $WORDPRESS_DB_PASSWORD
+ a ilovedevops``
 
 6. Pipeline d'Intégration Continue (CI):
    1. Créer un dépôt de type `DOCKER` sur artifact registry (si pas déjà fait, sinon utiliser celui appelé `website-tools`)
    2. Créer une configuration cloudbuild pour construire l'image docker et la publier sur le depôt Artifact Registry
    3. Envoyer (`submit`) le job sur Cloud Build et vérifier que l'image a bien été créée
+
+   ``Reponse gcloud builds submit --config=cloudbuild.yaml .``
 
 ## Partie 3 : Déployer Wordpress sur Cloud Run puis Kubernetes 🔥
 
