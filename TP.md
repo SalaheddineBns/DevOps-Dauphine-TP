@@ -35,9 +35,33 @@ Nous allons créer les ressources suivantes à l'aide de Terraform :
 - un compte utilisateur de la base de données
 
 1. Commencer par créer le bucket GCS (Google Cloud Storage) qui servira à stocker le state Terraform.
+```
+Reponse: 
+Declarer les variable
+
+PROJECT_ID=$(gcloud config get-value project)
+BUCKET_NAME="${PROJECT_ID}-terraform-state"
+LOCATION="us-central1"
+et apres executer la commande pour creer un bucket 
+
+gsutil mb -p $PROJECT_ID -l $LOCATION -c STANDARD gs://$BUCKET_NAME/
+
+```
 2. Définir les éléments de base nécessaires à la bonne exécution de terraform : utiliser l'exemple sur le [repo du cours](https://github.com/aballiet/devops-dauphine-2024/tree/main/exemple/cloudbuild-terraform) si besoin pour vous aider
+
+```
+voir les fichiers crees !
+```
 3. Afin de créer la base de données, utiliser la documentation [SQL Database](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) et enfin un [SQL User](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_user)
    1. Pour `google_sql_database`, définir `name="wordpress"` et `instance="main-instance"`
+   ````
+   reponse : 
+  resource "google_sql_database" "wordpress" {
+  name     = "wordpress"
+  instance = "main-instance"
+}
+
+   ```
    2. Pour `google_sql_user`, définissez le comme ceci :
       ```hcl
       resource "google_sql_user" "wordpress" {
